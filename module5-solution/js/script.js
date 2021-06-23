@@ -88,7 +88,6 @@ $ajaxUtils.sendGetRequest(
 });
 // *** finish **
 
-
 // Builds HTML for the home page based on categories array
 // returned from the server.
 function buildAndShowHomeHTML (categories) {
@@ -97,13 +96,12 @@ function buildAndShowHomeHTML (categories) {
   $ajaxUtils.sendGetRequest(
     homeHtmlUrl,
     function (homeHtml) {
-      var chosenCategoryShortName = 
-        chooseRandomCategory (categories);
-        insertHtml ("#main-content", chosenCategoryShortName);
-
-
-                  
-
+     
+    var chosenCategoryShortName = chooseRandomCategory (categories).short_name;
+    chosenCategoryShortName = "'" + chosenCategoryShortName + "'";
+    var homeHtmlToInsertIntoMainPage = insertProperty (homeHtml, "randomCategoryShortName", chosenCategoryShortName);
+        
+        
       // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
       // variable's name implies it expects.
@@ -128,28 +126,12 @@ function buildAndShowHomeHTML (categories) {
       // Use the existing insertHtml function for that purpose. Look through this code for an example
       // of how to do that.
       // ....
-
+    insertHtml ("#main-content", homeHtmlToInsertIntoMainPage);
     },
     false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
-
 }
 
 
-var menuItems = categoryMenuItems.menu_items;
-var randomCategoryShortName = categoryMenuItems.category.short_name;
-for (var i = 0; i <menuItems.length; i++){
-  var homeHtmlToInsertIntoMainPage = menuItemHtml;
-  homeHtmlToInsertIntoMainPage = 
-    insertProperty (homeHtmlToInsertIntoMainPage, "randomCategoryShortName", menuItems [i].short_name);
-
-    finalHtml += homeHtmlToInsertIntoMainPage;
-
-}
-
-    finalHtml =+ "</section>";
-    return finalHtml;
-
-}
 
 // Given array of category objects, returns a random category object.
 function chooseRandomCategory (categories) {
